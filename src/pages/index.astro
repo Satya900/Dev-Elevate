@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TopicSection from '../components/TopicSection.astro';
+import CourseCard from '../components/CourseCard.astro';
+---
+
+<Layout title="Welcome">
+	<section class="bg-gradient-to-r from-green-600 to-green-400 text-white py-20">
+		<div class="container mx-auto px-4 text-center">
+			<h1 class="text-4xl md:text-6xl font-bold mb-6">Welcome to Dev Elevate</h1>
+			<p class="text-xl mb-8">Your journey to programming excellence starts here</p>
+			<a href="#courses" class="bg-white text-green-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+				Start Learning
+			</a>
+		</div>
+	</section>
+
+	<TopicSection
+		title="Data Structures & Algorithms"
+		description="Master the fundamentals of DSA with our comprehensive tutorials and practice problems."
+	>
+		<CourseCard
+			href="/dsa/arrays"
+			title="Arrays & Strings"
+			description="Learn array manipulation techniques and string algorithms"
+			icon="📊"
+		/>
+		<CourseCard
+			href="/dsa/dynamic-programming"
+			title="Dynamic Programming"
+			description="Master the art of solving complex problems efficiently"
+			icon="🧮"
+		/>
+		<CourseCard
+			href="/dsa/graphs"
+			title="Graphs & Trees"
+			description="Explore advanced data structures and algorithms"
+			icon="🕸️"
+		/>
+	</TopicSection>
+
+	<TopicSection
+		title="Web Development"
+		description="Build modern web applications with the latest technologies and best practices."
+	>
+		<CourseCard
+			href="/web-development/frontend"
+			title="Frontend Development"
+			description="HTML, CSS, JavaScript, React, Vue, Angular, and more"
+			icon="🎨"
+		/>
+		<CourseCard
+			href="/web-development/backend"
+			title="Backend Development"
+			description="Node.js, Python, Java, Databases, APIs, and more"
+			icon="⚙️"
+		/>
+	</TopicSection>
+
+	<TopicSection
+		title="Programming Languages"
+		description="Deep dive into popular programming languages and their ecosystems."
+	>
+		<CourseCard
+			href="/languages/javascript"
+			title="JavaScript"
+			description="Modern JavaScript from fundamentals to advanced concepts"
+			icon="💛"
+		/>
+		<CourseCard
+			href="/languages/python"
+			title="Python"
+			description="Learn Python programming for various applications"
+			icon="🐍"
+		/>
+		<CourseCard
+			href="/languages/java"
+			title="Java"
+			description="Object-oriented programming with Java"
+			icon="☕"
+		/>
+	</TopicSection>
+</Layout>

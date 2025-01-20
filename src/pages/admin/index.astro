@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { supabase } from '../../lib/supabase';
+
+// Check if user is authenticated
+const { data: { session } } = await supabase.auth.getSession();
+
+if (!session) {
+  return Astro.redirect('/admin/login');
+}
+
+const { data: posts } = await supabase
+  .from('posts')
+  .select('*')
+  .order('created_at', { ascending: false });
+---
+
+<Layout title="Admin Dashboard">
+  <div class="container mx-auto px-4 py-12">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-800">Admin Dashboard</h1>
+      <a
+        href="/admin/posts/new"
+        class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+      >
+        New Post
+      </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <table class="min-w-full">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {posts?.map((post) => (
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900">{post.title}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  {post.category}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {new Date(post.created_at).toLocaleDateString()}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <a href={`/admin/posts/${post.slug}/edit`} class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
+                <button
+                  data-slug={post.slug}
+                  class="text-red-600 hover:text-red-900 delete-post"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { deletePost } from '../../lib/supabase';
+
+  document.querySelectorAll('.delete-post').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      const slug = (e.target as HTMLButtonElement).dataset.slug;
+      if (!slug) return;
+
+      if (confirm('Are you sure you want to delete this post?')) {
+        try {
+          await deletePost(slug);
+          window.location.reload();
+        } catch (error) {
+          alert('Error deleting post');
+        }
+      }
+    });
+  });
+</script>

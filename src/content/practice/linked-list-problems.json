@@ -1,0 +1,72 @@
+{
+  "problems": [
+    {
+      "id": "reverse-linked-list",
+      "title": "Reverse a Linked List",
+      "difficulty": "Medium",
+      "description": "Write a function that reverses a singly linked list.",
+      "starterCode": "class ListNode {\n  constructor(val = 0, next = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction reverseList(head) {\n  // Write your code here\n}",
+      "testCases": [
+        {
+          "input": [1, 2, 3, 4, 5],
+          "output": [5, 4, 3, 2, 1],
+          "description": "Basic case with 5 elements"
+        },
+        {
+          "input": [1],
+          "output": [1],
+          "description": "Single element"
+        },
+        {
+          "input": [],
+          "output": [],
+          "description": "Empty list"
+        },
+        {
+          "input": [1, 2],
+          "output": [2, 1],
+          "description": "Two elements"
+        },
+        {
+          "input": [1, 2, 3],
+          "output": [3, 2, 1],
+          "description": "Three elements"
+        }
+      ]
+    },
+    {
+      "id": "detect-cycle",
+      "title": "Detect Cycle in Linked List",
+      "difficulty": "Medium",
+      "description": "Given head of a linked list, determine if the linked list has a cycle in it. Return true if there is a cycle, false otherwise.",
+      "starterCode": "class ListNode {\n  constructor(val = 0, next = null) {\n    this.val = val;\n    this.next = next;\n  }\n}\n\nfunction hasCycle(head) {\n  // Write your code here\n}",
+      "testCases": [
+        {
+          "input": {"values": [3,2,0,-4], "pos": 1},
+          "output": true,
+          "description": "List with cycle at position 1"
+        },
+        {
+          "input": {"values": [1,2], "pos": 0},
+          "output": true,
+          "description": "Two node cycle"
+        },
+        {
+          "input": {"values": [1], "pos": -1},
+          "output": false,
+          "description": "Single node no cycle"
+        },
+        {
+          "input": {"values": [1,2,3,4], "pos": -1},
+          "output": false,
+          "description": "No cycle"
+        },
+        {
+          "input": {"values": [1,2,3,4,5], "pos": 4},
+          "output": true,
+          "description": "Cycle at last node"
+        }
+      ]
+    }
+  ]
+}

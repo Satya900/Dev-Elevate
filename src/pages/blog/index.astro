@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { fetchPosts } from '../../lib/supabase';
+
+const posts = await fetchPosts();
+---
+
+<Layout title="Blog">
+	<div class="container mx-auto px-4 py-12">
+		<h1 class="text-4xl font-bold text-gray-800 mb-8">Latest Articles</h1>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+			{posts.map((post) => (
+				<article class="bg-white rounded-lg shadow-md overflow-hidden">
+					<a href={`/blog/${post.slug}`}>
+						<div class="p-6">
+							<span class="text-green-600 text-sm font-semibold">{post.category}</span>
+							<h2 class="text-xl font-bold text-gray-800 mt-2 mb-4">{post.title}</h2>
+							<p class="text-gray-600 mb-4">{post.excerpt}</p>
+							<div class="flex items-center text-sm text-gray-500">
+								<span>{post.author}</span>
+								<span class="mx-2">•</span>
+								<time>{new Date(post.created_at).toLocaleDateString()}</time>
+							</div>
+						</div>
+					</a>
+				</article>
+			))}
+		</div>
+	</div>
+</Layout>

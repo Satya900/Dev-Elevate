@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const dsaPosts = allPosts.filter(post => post.data.category === 'DSA');
+
+// Define main DSA topics
+const dsaTopics = [
+  {
+    title: 'Time and Space Complexity',
+    icon: '⏱️',
+    description: 'Understanding algorithmic efficiency and resource utilization',
+    slug: 'complexity',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Complexity'))
+  },
+  {
+    title: 'Arrays',
+    icon: '📊',
+    description: 'Linear data structure for storing elements in contiguous memory',
+    slug: 'arrays',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Arrays'))
+  },
+  {
+    title: 'Linked Lists',
+    icon: '🔗',
+    description: 'Sequential collection of elements with dynamic memory allocation',
+    slug: 'linked-lists',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Linked Lists'))
+  },
+  {
+    title: 'Stacks and Queues',
+    icon: '📚',
+    description: 'LIFO and FIFO data structures for managing collections',
+    slug: 'stacks-queues',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Stacks') || post.data.tags?.includes('Queues'))
+  },
+  {
+    title: 'Trees',
+    icon: '🌳',
+    description: 'Hierarchical data structures with parent-child relationships',
+    slug: 'trees',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Trees'))
+  },
+  {
+    title: 'Graphs',
+    icon: '🕸️',
+    description: 'Non-linear data structures representing networks and relationships',
+    slug: 'graphs',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Graphs'))
+  },
+  {
+    title: 'Sorting Algorithms',
+    icon: '📋',
+    description: 'Methods for arranging data in a specific order',
+    slug: 'sorting',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Sorting'))
+  },
+  {
+    title: 'Searching Algorithms',
+    icon: '🔍',
+    description: 'Techniques for finding elements in data structures',
+    slug: 'searching',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Searching'))
+  },
+  {
+    title: 'Dynamic Programming',
+    icon: '🧮',
+    description: 'Solving complex problems by breaking them into simpler subproblems',
+    slug: 'dynamic-programming',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Dynamic Programming'))
+  },
+  {
+    title: 'Greedy Algorithms',
+    icon: '🎯',
+    description: 'Making locally optimal choices at each step',
+    slug: 'greedy',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Greedy'))
+  },
+  {
+    title: 'Backtracking',
+    icon: '↩️',
+    description: 'Finding solutions by trying different paths',
+    slug: 'backtracking',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Backtracking'))
+  },
+  {
+    title: 'Bit Manipulation',
+    icon: '🔢',
+    description: 'Working with binary representations of numbers',
+    slug: 'bit-manipulation',
+    articles: dsaPosts.filter(post => post.data.tags?.includes('Bit Manipulation'))
+  }
+];
+---
+
+<Layout title="Data Structures & Algorithms">
+	<div class="container mx-auto px-4 py-12">
+		<h1 class="text-4xl font-bold text-gray-800 mb-8">Data Structures & Algorithms</h1>
+		
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+			{dsaTopics.map((topic) => (
+				<a href={`/dsa/${topic.slug}`} class="block">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+						<div class="p-6">
+							<div class="flex items-center gap-3 mb-4">
+								<span class="text-3xl">{topic.icon}</span>
+								<h2 class="text-2xl font-bold text-gray-800">{topic.title}</h2>
+							</div>
+							<p class="text-gray-600 mb-4">{topic.description}</p>
+							<div class="flex justify-between items-center text-sm">
+								<span class="text-green-600 font-semibold">
+									{topic.articles.length} {topic.articles.length === 1 ? 'Article' : 'Articles'}
+								</span>
+								<span class="text-gray-400">Click to explore →</span>
+							</div>
+						</div>
+					</div>
+				</a>
+			))}
+		</div>
+	</div>
+</Layout>

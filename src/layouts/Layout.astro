@@ -1,0 +1,93 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Dev Elevate - Your Ultimate Programming Learning Platform" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} | Dev Elevate</title>
+	</head>
+	<body>
+		<header class="bg-[#1a1a1a] text-white py-4 fixed w-full top-0 z-50">
+			<nav class="container mx-auto px-4 flex justify-between items-center">
+				<a href="/" class="text-2xl font-bold">Dev Elevate</a>
+				<div class="space-x-6">
+					<a href="/dsa" class="hover:text-green-400">DSA</a>
+					<a href="/web-development" class="hover:text-green-400">Web Dev</a>
+					<a href="/tutorials" class="hover:text-green-400">Tutorials</a>
+					<a href="/practice" class="hover:text-green-400">Practice</a>
+				</div>
+			</nav>
+		</header>
+		<main class="mt-16">
+			<slot />
+		</main>
+		<footer class="bg-[#1a1a1a] text-white py-8 mt-16">
+			<div class="container mx-auto px-4">
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					<div>
+						<h3 class="text-xl font-bold mb-4">Dev Elevate</h3>
+						<p>Your ultimate destination for programming tutorials, DSA, and web development.</p>
+					</div>
+					<div>
+						<h3 class="text-xl font-bold mb-4">Quick Links</h3>
+						<ul class="space-y-2">
+							<li><a href="/about" class="hover:text-green-400">About Us</a></li>
+							<li><a href="/contact" class="hover:text-green-400">Contact</a></li>
+							<li><a href="/contribute" class="hover:text-green-400">Contribute</a></li>
+						</ul>
+					</div>
+					<div>
+						<h3 class="text-xl font-bold mb-4">Follow Us</h3>
+						<div class="flex space-x-4">
+							<a href="#" class="hover:text-green-400">Twitter</a>
+							<a href="#" class="hover:text-green-400">GitHub</a>
+							<a href="#" class="hover:text-green-400">LinkedIn</a>
+						</div>
+					</div>
+				</div>
+				<div class="mt-8 text-center border-t border-gray-700 pt-8">
+					<p>&copy; {new Date().getFullYear()} Dev Elevate. All rights reserved.</p>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
+<style is:global>
+	:root {
+		--accent: 76, 175, 80;
+		--accent-light: 129, 199, 132;
+		--accent-dark: 56, 142, 60;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+	html {
+		font-family: system-ui, sans-serif;
+		background: #f5f5f5;
+		scroll-behavior: smooth;
+	}
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+</style>

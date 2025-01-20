@@ -1,0 +1,19 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import PostEditor from '../../../components/PostEditor';
+import { supabase } from '../../../lib/supabase';
+
+// Check if user is authenticated
+const { data: { session } } = await supabase.auth.getSession();
+
+if (!session) {
+  return Astro.redirect('/admin/login');
+}
+---
+
+<Layout title="New Post">
+  <div class="container mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8">Create New Post</h1>
+    <PostEditor client:load />
+  </div>
+</Layout>

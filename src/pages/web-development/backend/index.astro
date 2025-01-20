@@ -1,0 +1,63 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+
+const topics = [
+  {
+    title: 'Node.js',
+    path: '/web-development/backend/nodejs',
+    icon: '💚',
+    description: 'Server-side JavaScript with Node.js'
+  },
+  {
+    title: 'Python',
+    path: '/web-development/backend/python',
+    icon: '🐍',
+    description: 'Backend development with Python'
+  },
+  {
+    title: 'Databases',
+    path: '/web-development/backend/databases',
+    icon: '🗄️',
+    description: 'SQL, NoSQL, and database design'
+  },
+  {
+    title: 'APIs',
+    path: '/web-development/backend/apis',
+    icon: '🔌',
+    description: 'RESTful and GraphQL API development'
+  },
+  {
+    title: 'Authentication',
+    path: '/web-development/backend/auth',
+    icon: '🔐',
+    description: 'Implement secure user authentication'
+  },
+  {
+    title: 'DevOps',
+    path: '/web-development/backend/devops',
+    icon: '🚀',
+    description: 'Deployment, CI/CD, and cloud services'
+  }
+];
+---
+
+<Layout title="Backend Development">
+  <div class="container mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-gray-800 mb-8">Backend Development</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {topics.map(topic => (
+        <a href={topic.path} class="block">
+          <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300">
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-3xl">{topic.icon}</span>
+                <h2 class="text-2xl font-bold text-gray-800">{topic.title}</h2>
+              </div>
+              <p class="text-gray-600">{topic.description}</p>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>

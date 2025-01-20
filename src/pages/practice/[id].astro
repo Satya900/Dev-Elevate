@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import problems from '../../content/practice/linked-list-problems.json';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return problems.problems.map(problem => ({
+    params: { id: problem.id },
+    props: { problem },
+  }));
+}
+
+const { problem } = Astro.props;
+---
+
+<Layout title={problem.title}>
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Problem Description -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h1 class="text-3xl font-bold text-gray-800">{problem.title}</h1>
+          <span class={`px-3 py-1 rounded-full text-sm ${
+            problem.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
+            problem.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+            'bg-red-100 text-red-800'
+          }`}>
+            {problem.difficulty}
+          </span>
+        </div>
+        <div class="prose max-w-none">
+          <h2 class="text-xl font-semibold mb-4">Problem Description</h2>
+          <p class="text-gray-700 mb-6">{problem.description}</p>
+          
+          <h2 class="text-xl font-semibold mb-4">Test Cases</h2>
+          <div class="space-y-4">
+            {problem.testCases.map((testCase, index) => (
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="font-medium mb-2">Test Case {index + 1}: {testCase.description}</p>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <p class="text-sm text-gray-600">Input:</p>
+                    <pre class="bg-gray-100 p-2 rounded mt-1 text-sm">{JSON.stringify(testCase.input, null, 2)}</pre>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-600">Expected Output:</p>
+                    <pre class="bg-gray-100 p-2 rounded mt-1 text-sm">{JSON.stringify(testCase.output, null, 2)}</pre>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Editor -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Solution</h2>
+        <div class="mb-4">
+          <div class="bg-gray-900 rounded-lg p-4">
+            <pre class="text-white overflow-x-auto"><code>{problem.starterCode}</code></pre>
+          </div>
+        </div>
+        <div class="flex justify-between">
+          <button
+            id="runCode"
+            class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Run Code
+          </button>
+          <button
+            id="submitSolution"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Submit Solution
+          </button>
+        </div>
+        <div id="output" class="mt-6 hidden">
+          <h3 class="text-lg font-semibold mb-2">Output:</h3>
+          <div class="bg-gray-100 p-4 rounded-lg">
+            <pre id="outputText" class="whitespace-pre-wrap"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Basic code execution simulation
+  document.getElementById('runCode')?.addEventListener('click', () => {
+    const output = document.getElementById('output');
+    const outputText = document.getElementById('outputText');
+    if (output && outputText) {
+      output.classList.remove('hidden');
+      outputText.textContent = 'Running test cases...\n\n' + 
+        'Note: This is a demo interface. In a production environment, ' +
+        'code would be executed securely on a backend server.';
+    }
+  });
+
+  document.getElementById('submitSolution')?.addEventListener('click', () => {
+    const output = document.getElementById('output');
+    const outputText = document.getElementById('outputText');
+    if (output && outputText) {
+      output.classList.remove('hidden');
+      outputText.textContent = 'Submitting solution...\n\n' +
+        'Note: This is a demo interface. In a production environment, ' +
+        'solutions would be validated on a backend server.';
+    }
+  });
+</script>

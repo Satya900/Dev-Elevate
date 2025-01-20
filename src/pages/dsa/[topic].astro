@@ -1,0 +1,146 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  const dsaPosts = allPosts.filter(post => post.data.category === 'DSA');
+  
+  const topics = {
+    'complexity': {
+      title: 'Time and Space Complexity',
+      tag: 'Complexity',
+      icon: '⏱️',
+      path: '/dsa/complexity'
+    },
+    'arrays': {
+      title: 'Arrays',
+      tag: 'Arrays',
+      icon: '📊',
+      path: '/dsa/arrays'
+    },
+    'linked-lists': {
+      title: 'Linked Lists',
+      tag: 'Linked Lists',
+      icon: '🔗',
+      path: '/dsa/linked-lists'
+    },
+    'stacks-queues': {
+      title: 'Stacks and Queues',
+      tag: ['Stacks', 'Queues'],
+      icon: '📚',
+      path: '/dsa/stacks-queues'
+    },
+    'trees': {
+      title: 'Trees',
+      tag: 'Trees',
+      icon: '🌳',
+      path: '/dsa/trees'
+    },
+    'graphs': {
+      title: 'Graphs',
+      tag: 'Graphs',
+      icon: '🕸️',
+      path: '/dsa/graphs'
+    },
+    'sorting': {
+      title: 'Sorting Algorithms',
+      tag: 'Sorting',
+      icon: '📋',
+      path: '/dsa/sorting'
+    },
+    'searching': {
+      title: 'Searching Algorithms',
+      tag: 'Searching',
+      icon: '🔍',
+      path: '/dsa/searching'
+    },
+    'dynamic-programming': {
+      title: 'Dynamic Programming',
+      tag: 'Dynamic Programming',
+      icon: '🧮',
+      path: '/dsa/dynamic-programming'
+    },
+    'greedy': {
+      title: 'Greedy Algorithms',
+      tag: 'Greedy',
+      icon: '🎯',
+      path: '/dsa/greedy'
+    },
+    'backtracking': {
+      title: 'Backtracking',
+      tag: 'Backtracking',
+      icon: '↩️',
+      path: '/dsa/backtracking'
+    },
+    'bit-manipulation': {
+      title: 'Bit Manipulation',
+      tag: 'Bit Manipulation',
+      icon: '🔢',
+      path: '/dsa/bit-manipulation'
+    }
+  };
+
+  return Object.entries(topics).map(([slug, topic]) => {
+    const topicPosts = dsaPosts.filter(post => {
+      if (Array.isArray(topic.tag)) {
+        return post.data.tags?.some(tag => topic.tag.includes(tag));
+      }
+      return post.data.tags?.includes(topic.tag);
+    });
+
+    return {
+      params: { topic: slug },
+      props: { 
+        title: topic.title,
+        icon: topic.icon,
+        path: topic.path,
+        posts: topicPosts
+      }
+    };
+  });
+}
+
+const { title, icon, path, posts } = Astro.props;
+---
+
+<Layout title={title}>
+  <div class="container mx-auto px-4 py-12">
+    <div class="flex items-center gap-4 mb-8">
+      <span class="text-4xl">{icon}</span>
+      <h1 class="text-4xl font-bold text-gray-800">{title}</h1>
+    </div>
+
+    <div class="space-y-8">
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300">
+            <a href={`/blog/${post.slug}`} class="block p-6">
+              <h2 class="text-2xl font-bold text-gray-800 mb-3">{post.data.title}</h2>
+              <p class="text-gray-600 mb-4">{post.data.excerpt}</p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                {post.data.tags?.map(tag => (
+                  <span class="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div class="flex items-center text-sm text-gray-500">
+                <span>{post.data.author}</span>
+                <span class="mx-2">•</span>
+                <time>{new Date(post.data.date).toLocaleDateString()}</time>
+              </div>
+            </a>
+          </article>
+        ))
+      ) : (
+        <div class="bg-white rounded-lg shadow-md p-8 text-center">
+          <p class="text-gray-600 text-lg">Content for this topic is coming soon!</p>
+          <p class="text-gray-500 mt-2">Check back later for updates.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>
