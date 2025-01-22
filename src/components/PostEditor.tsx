@@ -79,7 +79,7 @@ export default function PostEditor() {
         <label className="block text-sm font-medium text-gray-700">Content</label>
         {typeof window !== 'undefined' && (
           <Editor
-            apiKey={import.meta.env.PUBLIC_TINYMCE_API_KEY}
+            apiKey="kqswh7opnf3wc2fg2xml08xw06vtryujr3bp7rek8u7qbgq8"
             init={{
               height: 500,
               menubar: false,

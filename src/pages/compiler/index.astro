@@ -1,0 +1,171 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { supportedLanguages } from '../../lib/languages';
+
+---
+
+<Layout title="Online Compiler">
+  <div class="container mx-auto px-4 py-12">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-3xl font-bold text-gray-800">Online Compiler</h1>
+        <select
+          id="languageSelect"
+          class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          {supportedLanguages.map(lang => (
+            <option value={lang.id}>{lang.name}</option>
+          ))}
+        </select>
+      </div>
+      
+      <div class="mb-4">
+        <textarea
+          id="codeEditor"
+          class="w-full h-96 font-mono text-sm p-4 bg-gray-900 text-white rounded-lg"
+          spellcheck="false"
+          placeholder="Write your code here..."
+        ></textarea>
+      </div>
+
+      <div class="flex justify-between items-center mb-4">
+        <button
+          id="runCode"
+          class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+        >
+          Run Code
+        </button>
+        <div class="flex items-center space-x-2">
+          <input
+            type="file"
+            id="inputFile"
+            class="hidden"
+            accept=".txt,.js,.py,.java"
+          />
+          <button
+            id="loadFile"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Load File
+          </button>
+          <button
+            id="downloadCode"
+            class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            Download Code
+          </button>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <h3 class="text-lg font-semibold mb-2">Input</h3>
+        <textarea
+          id="input"
+          class="w-full h-24 font-mono text-sm p-4 bg-gray-50 border border-gray-200 rounded-lg"
+          placeholder="Program input (optional)"
+        ></textarea>
+      </div>
+
+      <div id="output" class="hidden">
+        <h3 class="text-lg font-semibold mb-2">Output</h3>
+        <pre id="outputText" class="bg-gray-50 p-4 rounded-lg border border-gray-200 font-mono text-sm whitespace-pre-wrap"></pre>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { supportedLanguages } from '../../lib/languages';
+
+  const languageSelect = document.getElementById('languageSelect') as HTMLSelectElement;
+  const codeEditor = document.getElementById('codeEditor') as HTMLTextAreaElement;
+  const input = document.getElementById('input') as HTMLTextAreaElement;
+  const output = document.getElementById('output') as HTMLDivElement;
+  const outputText = document.getElementById('outputText') as HTMLPreElement;
+  const loadFileBtn = document.getElementById('loadFile') as HTMLButtonElement;
+  const inputFile = document.getElementById('inputFile') as HTMLInputElement;
+  const downloadBtn = document.getElementById('downloadCode') as HTMLButtonElement;
+
+  // Set initial template based on selected language
+  function updateEditorTemplate() {
+    const language = supportedLanguages.find(lang => lang.id === languageSelect.value);
+    if (language) {
+      codeEditor.value = language.defaultTemplate;
+    }
+  }
+
+  // Initialize editor with default template
+  updateEditorTemplate();
+
+  // Update template when language changes
+  languageSelect.addEventListener('change', updateEditorTemplate);
+
+  // Run code
+  async function executeCode() {
+    if (!output || !outputText) return;
+
+    output.classList.remove('hidden');
+    outputText.textContent = 'Running...';
+
+    try {
+      const response = await fetch('/api/compile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          code: codeEditor.value,
+          language: languageSelect.value,
+          input: input.value,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.error) {
+        outputText.innerHTML = `<span class="text-red-600">Error: ${result.error}</span>`;
+        return;
+      }
+
+      outputText.textContent = result.output || 'No output';
+    } catch (error) {
+      outputText.innerHTML = `<span class="text-red-600">Error executing code: ${error.message}</span>`;
+    }
+  }
+
+  // File handling
+  loadFileBtn.addEventListener('click', () => inputFile.click());
+
+  inputFile.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          codeEditor.value = e.target.result as string;
+        }
+      };
+      reader.readAsText(file);
+    }
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    const language = supportedLanguages.find(lang => lang.id === languageSelect.value);
+    const extension = language?.extension || 'txt';
+    const blob = new Blob([codeEditor.value], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `code.${extension}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById('runCode')?.addEventListener('click', executeCode);
+</script>
